@@ -25,7 +25,7 @@ char		*find_type(char *format, va_list argc, t_form *form, int *i)
 	return (format + 1);
 }
 
-static char	*find_len(char *format, va_list argc, t_form *form, int *i)
+static char	*find_len(char *format, t_form *form)
 {
 	if (*format == 'l')
 		form->len = (*(format + 1) == 'l' ? ll : l);
@@ -37,14 +37,13 @@ static char	*find_len(char *format, va_list argc, t_form *form, int *i)
 		form->len = j;
 	else if (*format == 'z')
 		form->len = z;
-	else if (*format == 't')
-		form->len = t;
 }
 
 static char	*find_press(char *format, va_list argc, t_form *form, int *i)
 {
 	if (*format == '.')
 	{
+		form->zero = 0;
 		format++;
 		if (*format == '*')
 		{
@@ -58,7 +57,7 @@ static char	*find_press(char *format, va_list argc, t_form *form, int *i)
 				format++;
 		}
 	}
-	return (find_len(format, argc, form, i));
+	return (find_len(format, form));
 }
 static char	*find_width(char *format, va_list argc, t_form *form, int *i)
 {
