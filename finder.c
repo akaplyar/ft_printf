@@ -27,16 +27,21 @@ char		*find_type(char *format, va_list argc, t_form *form, int *i)
 
 static char	*find_len(char *format, t_form *form)
 {
-	if (*format == 'l')
-		form->len = (*(format + 1) == 'l' ? ll : l);
-	else if (*format == 'L')
-		form->len = L;
-	else if (*format == 'h')
-		form->len = (*(format + 1) == 'h' ? hh : h);
-	else if (*format == 'j')
-		form->len = j;
-	else if (*format == 'z')
-		form->len = z;
+	while (*format && !check_type(*format, -1))
+	{
+		if (*format == 'l')
+			form->len = (*(format + 1) == 'l' ? ll : l);
+		else if (*format == 'L')
+			form->len = L;
+		else if (*format == 'h')
+			form->len = (*(format + 1) == 'h' ? hh : h);
+		else if (*format == 'j')
+			form->len = j;
+		else if (*format == 'z')
+			form->len = z;
+		format++;
+	}
+	return (format);
 }
 
 static char	*find_press(char *format, va_list argc, t_form *form, int *i)

@@ -60,7 +60,7 @@ int				check_dolla(char *format);
 int				check_type(char c, int i);
 char			*find_flags(char *format, va_list argc, t_form *form, int *i);
 char			*find_type(char *format, va_list argc, t_form *form, int *i);
-char			*ft_llitoa(intmax_t value;
+char			*ft_llitoa(intmax_t value);
 char			*ft_ullitoa(uintmax_t value);
 char			*ft_llitoa_base(uintmax_t value, int base);
 void			fill_zero(t_form *form);

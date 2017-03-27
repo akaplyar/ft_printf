@@ -24,10 +24,10 @@ static void			parse_args(t_list **head, char **str, int *i)
 			type = check_type('\0', form->type);
 			if (type == 1 || type == 2)
 				parse_int(form, str, i, type);
-			else if (type == 3)
-				parse_str(form, str, i, type);
-			else if (type == 4)
-				parse_pointer(form , str, i, type);
+//			else if (type == 3)
+//				parse_str(form, str, i, type);
+//			else if (type == 4)
+//				parse_pointer(form , str, i, type);
 		}
 		else
 			join_line(node->content, str);
@@ -73,7 +73,7 @@ static const char	*parse_format(const char *format, va_list argc, t_list **head)
 	else
 	{
 		len = 1;
-		while (*(format + len) != '%')
+		while (*(format + len) && *(format + len) != '%')
 			len++;
 		node = ft_lstnew((void*)format, len);
 		node->content_size = 0;
@@ -87,19 +87,18 @@ int					ft_printf(const char *format, ...)
 	t_list  *head;
 	va_list argc;
 	char	*str;
-	int		dolla[2];
+	int		dolla[3];
 
+	head = NULL;
 	str = (char*)ft_memalloc(1);
 	dolla[0] = check_dolla((char*)format);
 	va_start(argc, format);
 	while (*format)
-	{
 		if (!(format = parse_format(format, argc, &head)))
 			return (0);
-		if (*format)
-			format++;
-	}
 	va_end(argc);
 	parse_args(&head, &str, dolla);
-	return (0);
+	dolla[2] = (int)ft_strlen(str);
+	write(1, str, (size_t)dolla[2]);
+	return (dolla[2]);
 }

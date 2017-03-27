@@ -56,7 +56,7 @@ char		*ft_llitoa(intmax_t value)
 	return (str);
 }
 
-char		*ft_llitoa_base(uintmax_t value, int base
+char		*ft_llitoa_base(uintmax_t value, int base)
 {
 	int		i;
 	char	*str;
