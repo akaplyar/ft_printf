@@ -1,50 +1,30 @@
 #include "ft_printf.h"
 
-char		*find_type(char *format, va_list argc, t_form *form, int *i)
-{
-	if (*format == 'd' || *format == 'D' || *format == 'i')
-		form->type = d;
-	else if (*format == 'o' || *format == 'O')
-		form->type = (*format == 'o' ? o : O);
-	else if (*format == 'u' || *format == 'U')
-		form->type = (*format == 'u' ? u : U);
-	else if (*format == 'x' || *format == 'X')
-		form->type = (*format == 'x' ? x : X);
-	else if (*format == 'c' || *format == 'C')
-		form->type = (*format == 'c' ? c : C);
-	else if (*format == 's' || *format == 'S')
-		form->type = (*format == 's' ? s : S);
-	else if (*format == 'b' || *format == 'n')
-		form->type = (*format == 'b' ? b : n);
-	if (*format == 'p')
-	{
-		form->hash = 1;
-		form->type = p;
-	}
-	form->arg = va_arg(argc, void *);
-	return (format + 1);
-}
-
 static char	*find_len(char *format, t_form *form)
 {
-	while (*format && !check_type(*format, -1))
-	{
-		if (*format == 'l')
-			form->len = (*(format + 1) == 'l' ? ll : l);
-		else if (*format == 'L')
-			form->len = L;
-		else if (*format == 'h')
-			form->len = (*(format + 1) == 'h' ? hh : h);
-		else if (*format == 'j')
-			form->len = j;
-		else if (*format == 'z')
-			form->len = z;
+	if (*format == 'h' && *(format + 1) == 'h')
+		form->len = (form->len < hh ? hh : form->len);
+	else if (*format == 'h')
+		form->len = (form->len < h ? h : form->len);
+	else if (*format == 'l' && *(format + 1) != 'l')
+		form->len = (form->len < l ? l : form->len);
+	else if (*format == 'l')
+		form->len = (form->len < ll ? ll : form->len);
+	else if (*format == 'j')
+		form->len = (form->len < j ? j : form->len);
+	else if (*format == 'z')
+		form->len = (form->len < z ? z : form->len);
+	else if (*format == 'L')
+		form->dl = 1;
+	if ((*format == 'h' && *(format + 1) == 'h') ||
+			(*format == 'l' && *(format + 1) == 'l'))
+		format += 2;
+	else if (ft_strchr("hljzL", *format))
 		format++;
-	}
 	return (format);
 }
 
-static char	*find_press(char *format, va_list argc, t_form *form, int *i)
+static char	*find_press(char *format, va_list argc, t_form *form)
 {
 	if (*format == '.')
 	{
@@ -62,9 +42,10 @@ static char	*find_press(char *format, va_list argc, t_form *form, int *i)
 				format++;
 		}
 	}
-	return (find_len(format, form));
+	return (format);
 }
-static char	*find_width(char *format, va_list argc, t_form *form, int *i)
+
+static char	*find_width(char *format, va_list argc, t_form *form)
 {
 	if (*format == '*')
 	{
@@ -81,10 +62,10 @@ static char	*find_width(char *format, va_list argc, t_form *form, int *i)
 		while (ft_isdigit(*format))
 			format++;
 	}
-	return (find_press(format, argc, form, i));
+	return (format);
 }
 
-char		*find_flags(char *format, va_list argc, t_form *form, int *i)
+static char	*find_flags(char *format, t_form *form)
 {
 	while (*format && check_flags(*format))
 	{
@@ -108,5 +89,19 @@ char		*find_flags(char *format, va_list argc, t_form *form, int *i)
 		}
 		format++;
 	}
-	return (find_width(format, argc, form, i));
+	return (format);
+}
+
+char		*parse_percent(char *format, va_list argc, t_form *form, int *i)
+{
+	format++;
+	while (*format && ft_strchr("0123456789+-*#.'hljzL ", *format))
+	{
+		format = find_flags(format, form);
+		format = find_width(format, argc, form);
+		format = find_press(format, argc, form);
+		format = find_len(format, argc);
+	}
+	format = find_type(format, argc, form, i);
+	return (format);
 }

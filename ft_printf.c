@@ -1,42 +1,27 @@
 #include "ft_printf.h"
 
-static void			join_line(char *line, char **str)
+static char			*make_line(char *format, char **str)
 {
-	char			*tmp;
+	size_t		len;
+	char		*line;
+	char		*ptr;
+	int			i;
 
-	tmp = *str;
-	*str = ft_strjoin(tmp, line);
-	free(tmp);
-}
-
-static void			parse_args(t_list **head, char **str, int *i)
-{
-	t_list			*node;
-	t_form			*form;
-	int				type;
-
-	node = *head;
-	while (node)
-	{
-		if (node->content_size)
-		{
-			form = (t_form *) node->content;
-			type = check_type('\0', form->type);
-			if (type == 1 || type == 2)
-				parse_int(form, str, i, type);
-//			else if (type == 3)
-//				parse_str(form, str, i, type);
-//			else if (type == 4)
-//				parse_pointer(form , str, i, type);
-		}
-		else
-			join_line(node->content, str);
-		node = node->next;
-	}
+	ptr = *str;
+	i = (*format == '%') ? 1 : 0;
+	len = i ? 1 : 0;
+	while (*(format + len) && *(format + len) != '%')
+		len++;
+	line = ft_strsub(format, 0, len);
+	*str = ft_strjoin(ptr, line);
+	format += (i ? 2 : len);
+	free(line);
+	return (format);
 }
 
 static void			form_init(t_form *form)
 {
+	form->dl = 0;
 	form->hash = 0;
 	form->zero = 0;
 	form->plus = 0;
@@ -53,51 +38,66 @@ static void			form_init(t_form *form)
 	form->out = NULL;
 }
 
-static const char	*parse_format(const char *format, va_list argc, t_list **head)
+char		*find_type(char *format, va_list argc, t_form *form, int *dolla)
+{
+	if (*format == 'd' || *format == 'D' || *format == 'i')
+		form->type = d;
+	else if (*format == 'o' || *format == 'O')
+		form->type = (*format == 'o' ? o : O);
+	else if (*format == 'u' || *format == 'U')
+		form->type = (*format == 'u' ? u : U);
+	else if (*format == 'x' || *format == 'X')
+		form->type = (*format == 'x' ? x : X);
+	else if (*format == 'c' || *format == 'C')
+		form->type = (*format == 'c' ? c : C);
+	else if (*format == 's' || *format == 'S')
+		form->type = (*format == 's' ? s : S);
+	else if (*format == 'b' || *format == 'n')
+		form->type = (*format == 'b' ? b : n);
+	else if (*format == 'p')
+	{
+		form->hash = 1;
+		form->type = p;
+	}
+	form->arg = va_arg(argc, void *);
+	return (format + 1);
+}
+
+static const char	*parse_format(const char *format, va_list argc, char **str, int *dolla)
 {
 	t_form			form;
-	size_t			len;
-	t_list			*node;
-	int 			i;
+	int				type;
 
-	i = 0;
-	len = 0;
-	if (*format == '%')
+	if (*format == '%' && *(format + 1) != '%')
 	{
 		form_init(&form);
-		format = find_flags((char*)format, argc, &form, &i);
-		format = find_type((char*)format, argc, &form, &i);
-		node = ft_lstnew((void*)&form, sizeof(t_form));
-		node->content_size = 1;
+		format = parse_percent((char*)format, argc, &form, dolla);
+		type = check_type('\0', form.type);
+		if (type == 1 || type == 2)
+			parse_int(&form, str, dolla, type);
+//		else if (type == 3)
+//			parse_str(form, str, i, type);
+//		else if (type == 4)
+//			parse_pointer(form , str, i, type);
 	}
 	else
-	{
-		len = 1;
-		while (*(format + len) && *(format + len) != '%')
-			len++;
-		node = ft_lstnew((void*)format, len);
-		node->content_size = 0;
-	}
-	ft_lst_push_back(head, node);
-	return (format + (len == 1 ? 2 : len));
+		format = make_line((char *)format, str);
+	return (format);
 }
 
 int					ft_printf(const char *format, ...)
 {
-	t_list  *head;
 	va_list argc;
 	char	*str;
 	int		dolla[3];
 
-	head = NULL;
 	str = (char*)ft_memalloc(1);
 	dolla[0] = check_dolla((char*)format);
 	va_start(argc, format);
 	while (*format)
-		if (!(format = parse_format(format, argc, &head)))
+		if (!(format = parse_format(format, argc, &str, dolla)))
 			return (0);
 	va_end(argc);
-	parse_args(&head, &str, dolla);
 	dolla[2] = (int)ft_strlen(str);
 	write(1, str, (size_t)dolla[2]);
 	return (dolla[2]);

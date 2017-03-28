@@ -17,7 +17,6 @@ enum	e_mode
 	h,
 	l,
 	ll,
-	L,
 	j,
 	z,
 	d,
@@ -50,6 +49,7 @@ typedef struct	s_form
 	int			len;
 	int 		type;
 	int			sign;
+	int			dl;
 	void 		*arg;
 	char 		*out;
 }				t_form;
@@ -58,7 +58,7 @@ int				ft_printf(const char *format, ...);
 int 			check_flags(char c);
 int				check_dolla(char *format);
 int				check_type(char c, int i);
-char			*find_flags(char *format, va_list argc, t_form *form, int *i);
+char			*parse_percent(char *format, va_list argc, t_form *form, int *i);
 char			*find_type(char *format, va_list argc, t_form *form, int *i);
 char			*ft_llitoa(intmax_t value);
 char			*ft_ullitoa(uintmax_t value);
@@ -68,7 +68,7 @@ void			fill_sign(t_form *form);
 void			fill_width(t_form *form);
 void			fill_hash_u(t_form *form, int mode);
 void			parse_int(t_form *form, char **str, int *i, int type);
-void			parse_str(t_form *form, char **str, int *i, int type);
+void			parse_str(t_form *form, char **str);
 void			parse_pointer(t_form *form, char **str, int *i, int type);
 
 #endif

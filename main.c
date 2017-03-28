@@ -2,10 +2,11 @@
 
 int			main(void)
 {
-	int		a;
+	int		a, b;
 
 	a = 12345;
-	ft_printf("%d\n", a);
-	printf("lib - %d\n", a);
+	b = a;
+	ft_printf("%#-10X|-my-|\n", a);
+	printf("%#-10X|-lib|\n", b);
 	return (0);
 }
