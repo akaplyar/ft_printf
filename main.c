@@ -9,7 +9,5 @@ int			main(void)
 	b = a;
 	ft_printf("%#-10X|-my-|\n", a);
 	printf("%#-10X|-lib|\n", b);
-	ft_printf("%S\n", w);
-//	printf("%S\n", w);
 	return (0);
 }

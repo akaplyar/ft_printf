@@ -103,7 +103,7 @@ char		*parse_percent(char *format, va_list argc, va_list tmp, t_form *form)
 		format = find_flags(format, form);
 		format = find_width(format, tmp, form);
 		format = find_press(format, tmp, form);
-		format = find_len(format, tmp);
+		format = find_len(format, form);
 		if (*format == '$')
 			format++;
 	}

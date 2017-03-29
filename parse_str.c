@@ -68,7 +68,7 @@ static void		parse_wstr(t_form *form, char **str)
 	{
 		wchar_parse(*wstr, cstr);
 		if (form->press >= 0)
-			if (ft_strlen(cstr) + ft_strlen(form->out) < form->press)
+			if (ft_strlen(cstr) + ft_strlen(form->out) < (size_t)form->press)
 				break ;
 		tmp = form->out;
 		form->out = ft_strjoin(tmp, cstr);
