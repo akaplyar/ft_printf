@@ -6,7 +6,7 @@
 #    By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/22 16:36:05 by akaplyar          #+#    #+#              #
-#    Updated: 2017/03/21 17:45:04 by akaplyar         ###   ########.fr        #
+#    Updated: 2017/03/29 14:53:34 by akaplyar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,8 @@ TARGET = libprintf.a
 all: ft $(OBJ) $(TARGET)
 
 $(TARGET):
-    ar rcs $(TARGET) $(OBJ) $(HEADER)
-    ranlib $(TARGET)
+	ar rcs $(TARGET) $(OBJ) $(HEADER)
+	ranlib $(TARGET)
 
 ft:
 	$(MAKE_LIB)
