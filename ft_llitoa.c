@@ -21,19 +21,19 @@ static void	make_str_base(uintmax_t value, char *str, int base, int *i)
 	str[(*i)++] = tmp[value % base];
 }
 
-static void	make_str_dec(intmax_t value, char *str, int *i)
+static void		make_str_dec(intmax_t value, char *str, int *i)
 {
-	char	tmp[] = "0123456789";
+	static char	tmp[] = "0123456789";
 
-	if (value > 9)
+	if (value > 9 || value < -9)
 		make_str_dec(value / 10, str, i);
 	str[(*i)++] = tmp[value < 0 ? -(value % 10) : (value % 10)];
 }
 
-char		*ft_ullitoa(uintmax_t value)
+char			*ft_ullitoa(uintmax_t value)
 {
-	int		i;
-	char	*str;
+	int			i;
+	char		*str;
 
 	i = 0;
 	if (!(str = (char*)malloc(32)))
@@ -43,10 +43,10 @@ char		*ft_ullitoa(uintmax_t value)
 	return (str);
 }
 
-char		*ft_llitoa(intmax_t value)
+char			*ft_llitoa(intmax_t value)
 {
-	int		i;
-	char	*str;
+	int			i;
+	char		*str;
 
 	i = 0;
 	if (!(str = (char*)malloc(32)))
@@ -56,10 +56,10 @@ char		*ft_llitoa(intmax_t value)
 	return (str);
 }
 
-char		*ft_llitoa_base(uintmax_t value, int base)
+char			*ft_llitoa_base(uintmax_t value, int base)
 {
-	int		i;
-	char	*str;
+	int			i;
+	char		*str;
 
 	i = 0;
 	if (base < 2 || base > 16 || !(str = (char*)malloc(32)))

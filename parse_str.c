@@ -39,20 +39,29 @@ static void		wchar_parse(wchar_t w, char *str)
 	}
 }
 
-static void		get_wchar(t_form *form, char **str)
+static void		get_char(t_form *form, char **str)
 {
-	wchar_t		w[2];
-	char		*ptr;
-	char		*tmp;
+	wchar_t			w;
+	char			*tmp;
 
-	w[0] = (wchar_t)form->arg;
-	w[1] = '\0';
 	tmp = *str;
-	ptr = ft_strnew(4);
-	wchar_parse(w[0], ptr);
-	*str = ft_strjoin(tmp, ptr);
+	if (form->type != c)
+	{
+		if (form->type == c)
+			form->out = ft_strsub((const char*)form->arg, 0, 1);
+		else
+			form->out = ft_strsub(form->out, 0, 1);
+	}
+	else
+	{
+		w = (wchar_t)form->arg;
+		form->out = ft_strnew(4);
+		wchar_parse(w, form->out);
+	}
+	fill_width(form);
+	*str = ft_strjoin(tmp, form->out);
 	free(tmp);
-	free(ptr);
+	free(form->out);
 }
 
 static void		parse_wstr(t_form *form, char **str)
@@ -85,27 +94,20 @@ static void		parse_wstr(t_form *form, char **str)
 
 void			parse_str(t_form *form, char **str)
 {
-	char				*ptr;
-	unsigned char		ch[2];
+	char		*ptr;
 
-	if (form->type == S || form->type == C)
-		form->type == S ? parse_wstr(form, str) : get_wchar(form, str);
+	if (form->type == S)
+		parse_wstr(form, str);
+	else if (form->type == c || form->type == C || form->type < 0)
+		get_char(form, str);
 	else
 	{
 		ptr = *str;
-		if (form->type == c)
-		{
-			ch[0] = (unsigned char)form->arg;
-			ch[1] = '\0';
-			*str = ft_strjoin(ptr, (const char*)ch);
-		}
-		else
-		{
-			form->out = (char*)form->arg;
-			cut_press(form);
-			fill_width(form);
-			*str = ft_strjoin(ptr, form->out);
-		}
+		if (!(form->out = ft_strdup((char*)form->arg)))
+			form->out = ft_strdup("(null)");
+		cut_press(form);
+		fill_width(form);
+		*str = ft_strjoin(ptr, form->out);
 		free(ptr);
 	}
 }

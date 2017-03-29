@@ -10,6 +10,8 @@ int			check_type(int i)
 			if (!(a = (i == b || i == p || i == u || i == U) ? 2 : 0))
 				if (!(a = (i == c || i == C || i == s || i == S) ? 3 : 0))
 						a = (i == n ? 4 : 0);
+	if (i < 0)
+		a = 3;
 	return (a);
 }
 

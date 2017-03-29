@@ -17,13 +17,15 @@ static void		len_cast2(t_form *form, intmax_t *buff, uintmax_t *ubuff)
 		*buff = (int)form->arg;
 		*ubuff = (unsigned int)form->arg;
 	}
+	if (!*ubuff || !*buff)
+		form->hash = 0;
 }
 
 static void		len_cast(t_form *form, intmax_t *buff, uintmax_t *ubuff)
 {
 	if (form->len == hh)
 	{
-		*buff = (short)form->arg;
+		*buff = (short)(int)form->arg;
 		*ubuff = (unsigned short)form->arg;
 	}
 	else if (form->len == h)
@@ -54,11 +56,9 @@ static void		apply_flags(t_form *form, char **str, int type)
 		fill_zero(form);
 	if (form->hash && type == 2)
 		fill_hash_u(form, (form->type == x || form->type == X) ? 1 : 0);
-	if ((form->sign || form->plus || form->space) && type == 1 && !form->zero)
+	if ((form->sign || form->plus || form->space) && type == 1)
 		fill_sign(form);
 	fill_width(form);
-	if ((form->sign || form->plus || form->space) && type == 1 && form->zero)
-		fill_sign(form);
 	if (form->type == X)
 		ft_strcapitalizer(form->out);
 	*str = ft_strjoin(tmp, form->out);
@@ -89,5 +89,7 @@ void			parse_int(t_form *form, char **str, int type)
 		else if (form->type == x || form->type == X)
 			form->out = ft_llitoa_base(ubuff, 16);
 	}
+	if (!form->press && (!buff || !ubuff))
+		ft_bzero(form->out, ft_strlen(form->out));
 	apply_flags(form, str, type);
 }

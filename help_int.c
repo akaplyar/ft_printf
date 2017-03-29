@@ -1,5 +1,22 @@
 # include "ft_printf.h"
 
+void		fill_hash_u(t_form *form, int mode)
+{
+	char	*tmp;
+	char	*hash;
+
+	hash = mode ? ft_strdup("0x") : ft_strdup("0");
+	if (form->zero)
+	{
+		form->width -= mode ? 2 : 1;
+		fill_width(form);
+	}
+	tmp = form->out;
+	form->out = ft_strjoin(hash, tmp);
+	free(tmp);
+	free(hash);
+}
+
 void		fill_width(t_form *form)
 {
 	size_t	len;
@@ -30,6 +47,11 @@ void		fill_sign(t_form *form)
 {
 	char	*tmp;
 
+	if (form->zero)
+	{
+		form->width -= (form->width ? 1 : 0);
+		fill_width(form);
+	}
 	tmp = form->out;
 	if (form->sign)
 		form->out = ft_strjoin("-", tmp);
@@ -40,18 +62,6 @@ void		fill_sign(t_form *form)
 	free(tmp);
 }
 
-void		fill_hash_u(t_form *form, int mode)
-{
-	char	*tmp;
-	char	*hash;
-
-	hash = mode ? ft_strdup("0x") : ft_strdup("0");
-	tmp = form->out;
-	form->out = ft_strjoin(hash, tmp);
-	free(tmp);
-	free(hash);
-}
-
 void		fill_zero(t_form *form)
 {
 	size_t	len;
@@ -60,7 +70,7 @@ void		fill_zero(t_form *form)
 	char	*tmp;
 	char	*zero_str;
 
-	press = (size_t)form->len;
+	press = (size_t)form->press;
 	len = ft_strlen(form->out);
 	if (press <= len)
 		return ;

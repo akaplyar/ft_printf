@@ -48,6 +48,8 @@ char		*find_type(char *format, va_list argc, t_form *form)
 		form->type = (*format == 'b' ? b : n);
 	else if (*format == 'p')
 		form->type = p;
+	else
+		form->out = format;
 	if (form->type == O || form->type == U)
 		form->len = (form->len < l ? l : form->len);
 	else if ((form->type == c || form->type == s) && form->cl)

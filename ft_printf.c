@@ -5,18 +5,15 @@ static char			*make_line(char *format, char **str)
 	size_t		len;
 	char		*line;
 	char		*ptr;
-	int			i;
 
 	ptr = *str;
-	i = (*format == '%') ? 1 : 0;
-	len = i ? 1 : 0;
+	len = 0;
 	while (*(format + len) && *(format + len) != '%')
 		len++;
 	line = ft_strsub(format, 0, len);
 	*str = ft_strjoin(ptr, line);
-	format += (i ? 2 : len);
 	free(line);
-	return (format);
+	return (format + len);
 }
 
 static void			form_init(t_form *form)
@@ -44,7 +41,7 @@ static const char	*parse_format(const char *format, va_list argc, va_list tmp, c
 	t_form			form;
 	int				type;
 
-	if (*format == '%' && *(format + 1) != '%')
+	if (*format == '%')
 	{
 		form_init(&form);
 		format = parse_percent((char*)format, argc, tmp, &form);
