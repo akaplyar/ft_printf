@@ -45,7 +45,7 @@ static void		len_cast(t_form *form, intmax_t *buff, uintmax_t *ubuff)
 		len_cast2(form, buff, ubuff);
 }
 
-static void		apply_flags(t_form *form, char **str, int *i, int type)
+static void		apply_flags(t_form *form, char **str, int type)
 {
 	char		*tmp;
 
@@ -66,7 +66,7 @@ static void		apply_flags(t_form *form, char **str, int *i, int type)
 	free(form->out);
 }
 
-void			parse_int(t_form *form, char **str, int *i, int type)
+void			parse_int(t_form *form, char **str, int type)
 {
 	intmax_t	buff;
 	uintmax_t	ubuff;
@@ -89,5 +89,5 @@ void			parse_int(t_form *form, char **str, int *i, int type)
 		else if (form->type == x || form->type == X)
 			form->out = ft_llitoa_base(ubuff, 16);
 	}
-	apply_flags(form, str, i, type);
+	apply_flags(form, str, type);
 }

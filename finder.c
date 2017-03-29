@@ -16,6 +16,8 @@ static char	*find_len(char *format, t_form *form)
 		form->len = (form->len < z ? z : form->len);
 	else if (*format == 'L')
 		form->dl = 1;
+	if (*format == 'l' && *(format + 1) != 'l')
+		form->cl = 1;
 	if ((*format == 'h' && *(format + 1) == 'h') ||
 			(*format == 'l' && *(format + 1) == 'l'))
 		format += 2;
@@ -92,16 +94,21 @@ static char	*find_flags(char *format, t_form *form)
 	return (format);
 }
 
-char		*parse_percent(char *format, va_list argc, t_form *form, int *i)
+char		*parse_percent(char *format, va_list argc, va_list tmp, t_form *form)
 {
 	format++;
-	while (*format && ft_strchr("0123456789+-*#.'hljzL ", *format))
+	format = find_dolla(format, form);
+	while (*format && ft_strchr("0123456789+-*$#.'hljzL ", *format))
 	{
 		format = find_flags(format, form);
-		format = find_width(format, argc, form);
-		format = find_press(format, argc, form);
-		format = find_len(format, argc);
+		format = find_width(format, tmp, form);
+		format = find_press(format, tmp, form);
+		format = find_len(format, tmp);
+		if (*format == '$')
+			format++;
 	}
-	format = find_type(format, argc, form, i);
+	if (form->dolla)
+		skip_va_list(argc, tmp, form);
+	format = find_type(format, tmp, form);
 	return (format);
 }
