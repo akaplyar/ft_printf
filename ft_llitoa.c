@@ -16,7 +16,7 @@ static void	make_str_base(uintmax_t value, char *str, int base, int *i)
 {
 	char tmp[] = "0123456789abcdef";
 
-	if (value >= base)
+	if (value >= (uintmax_t)base)
 		make_str_base(value / base, str, base, i);
 	str[(*i)++] = tmp[value % base];
 }
