@@ -30,19 +30,6 @@ static void		make_str_dec(intmax_t value, char *str, int *i)
 	str[(*i)++] = tmp[value < 0 ? -(value % 10) : (value % 10)];
 }
 
-char			*ft_ullitoa(uintmax_t value)
-{
-	int			i;
-	char		*str;
-
-	i = 0;
-	if (!(str = (char*)malloc(32)))
-		return (NULL);
-	make_str_dec(value, str, &i);
-	str[i] = '\0';
-	return (str);
-}
-
 char			*ft_llitoa(intmax_t value)
 {
 	int			i;

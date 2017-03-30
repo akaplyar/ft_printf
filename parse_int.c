@@ -61,6 +61,26 @@ static void		apply_flags(t_form *form, char **str, int type)
 	free(form->out);
 }
 
+void			print_memory(t_form *form, va_list argc, char **str)
+{
+	uintmax_t	mem;
+	char		*tmp;
+
+	tmp = *str;
+	mem = va_arg(argc, unsigned long long);
+	form->out = ft_llitoa_base(mem, 16);
+	if (!form->press && !mem)
+		ft_bzero(form->out, ft_strlen(form->out));
+	if (form->press >= 0)
+		fill_zero(form);
+	form->hash = 1;
+	fill_hash_u(form, 1);
+	fill_width(form);
+	*str = ft_strjoin(tmp, form->out);
+	free(tmp);
+	free(form->out);
+}
+
 void			parse_int(t_form *form, va_list argc, char **str, int type)
 {
 	intmax_t	buff;
@@ -77,7 +97,7 @@ void			parse_int(t_form *form, va_list argc, char **str, int type)
 	{
 		len_cast_u(form, argc, &ubuff);
 		if (form->type == u || form->type == U)
-			form->out = ft_ullitoa(ubuff);
+			form->out = ft_llitoa_base(ubuff, 10);
 		else if (form->type == b)
 			form->out = ft_llitoa_base(ubuff, 2);
 		else if (form->type == o || form->type == O)

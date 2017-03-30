@@ -50,9 +50,9 @@ char		*find_type(char *format, t_form *form)
 		form->type = p;
 	else
 		form->out = format;
-	if (form->type == O || form->type == U)
+	if (form->type == O || form->type == U || *format == 'D')
 		form->len = (form->len < l ? l : form->len);
 	else if ((form->type == c || form->type == s) && form->cl)
 		form->type = (form->type == c ? C : S);
-	return (format + 1);
+	return (*format ? format + 1 : format);
 }

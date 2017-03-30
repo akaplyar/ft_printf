@@ -45,13 +45,15 @@ static const char	*parse_format(const char *format, va_list argc, va_list tmp, c
 	{
 		form_init(&form);
 		format = parse_percent((char*)format, argc, tmp, &form);
-		type = check_type(form.type);
+		type = check_type(&form);
 		if (type == 1 || type == 2)
 			parse_int(&form, tmp, str, type);
 		else if (type == 3)
 			parse_str(&form, tmp, str);
-//		else if (type == 4)
-//			parse_pointer(&form , str, type);
+		else if (type == 4)
+			parse_pointer(&form , tmp, str);
+		else if (type == 5)
+			print_memory(&form, tmp, str);
 	}
 	else
 		format = make_line((char *)format, str);
@@ -65,6 +67,8 @@ int					ft_printf(const char *format, ...)
 	size_t			help;
 	char			*str;
 
+	if (!format)
+		return (0);
 	g_kostyl = 0;
 	str = (char*)ft_memalloc(1);
 	va_start(argc, format);
