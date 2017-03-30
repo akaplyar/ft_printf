@@ -52,11 +52,9 @@ typedef struct	s_form
 	int			sign;
 	int			dl;
 	int			cl;
-	size_t		kostyl;
+	int			nul;
 	char 		*out;
 }				t_form;
-
-size_t			g_kostyl;
 
 int				ft_printf(const char *format, ...);
 int 			check_flags(char c);
@@ -71,11 +69,11 @@ void			fill_zero(t_form *form);
 void			fill_sign(t_form *form);
 void			fill_width(t_form *form);
 void			fill_hash_u(t_form *form, int mode);
-void			parse_int(t_form *form, va_list argc, char **str, int type);
-void			parse_str(t_form *form, va_list argc, char **str);
-void			parse_wstr(t_form *form, va_list argc, char **str);
-void			print_memory(t_form *form, va_list argc, char **str);
-void			get_wchar(t_form *form, va_list argc, char **str);
-void			parse_pointer(t_form *form, va_list argc, char **str);
+void			parse_int(t_form *form, va_list argc, int *size, int type);
+void			parse_str(t_form *form, va_list argc, int *size);
+void			parse_wstr(t_form *form, va_list argc, int *size);
+void			print_memory(t_form *form, va_list argc, int *size);
+void			get_wchar(t_form *form, va_list argc, int *size);
+void			parse_pointer(t_form *form, va_list argc, int *size);
 
 #endif

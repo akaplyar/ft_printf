@@ -21,7 +21,7 @@ static char	*find_len(char *format, t_form *form)
 	if ((*format == 'h' && *(format + 1) == 'h') ||
 			(*format == 'l' && *(format + 1) == 'l'))
 		format += 2;
-	else if (ft_strchr("hljzL", *format))
+	else if (*format && ft_strchr("hljzL", *format))
 		format++;
 	return (format);
 }
@@ -30,7 +30,6 @@ static char	*find_press(char *format, va_list argc, t_form *form)
 {
 	if (*format == '.')
 	{
-		form->zero = 0;
 		format++;
 		if (*format == '*')
 		{
@@ -57,6 +56,7 @@ static char	*find_width(char *format, va_list argc, t_form *form)
 			form->minus = 1;
 			form->width *= -1;
 		}
+		format++;
 	}
 	else if (ft_isdigit(*format))
 	{

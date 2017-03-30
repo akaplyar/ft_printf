@@ -16,7 +16,7 @@ static void		len_cast_u(t_form *form, va_list argc, uintmax_t *ubuff)
 		*ubuff = va_arg(argc, size_t);
 	else
 		*ubuff = va_arg(argc, unsigned int);
-	if (!*ubuff && form->press < 0)
+	if (!*ubuff && form->type != o && form->type != O)
 		form->hash = 0;
 }
 
@@ -36,17 +36,15 @@ static void		len_cast(t_form *form, va_list argc, intmax_t *buff)
 		*buff = va_arg(argc, size_t);
 	else
 		*buff = va_arg(argc, int);
-	if (!*buff)
-		form->hash = 0;
 }
 
-static void		apply_flags(t_form *form, char **str, int type)
+static void		apply_flags(t_form *form, int *size, int type)
 {
-	char		*tmp;
-
-	tmp = *str;
 	if (form->press >= 0)
+	{
+		form->zero = 0;
 		fill_zero(form);
+	}
 	if (form->hash && type == 2)
 		fill_hash_u(form, (form->type == x || form->type == X) ? 1 : 0);
 	if ((form->sign || form->plus || form->space) && type == 1)
@@ -54,17 +52,14 @@ static void		apply_flags(t_form *form, char **str, int type)
 	fill_width(form);
 	if (form->type == X)
 		ft_strcapitalizer(form->out);
-	*str = ft_strjoin(tmp, form->out);
-	free(tmp);
+	*size += write(1, form->out, ft_strlen(form->out));
 	free(form->out);
 }
 
-void			print_memory(t_form *form, va_list argc, char **str)
+void			print_memory(t_form *form, va_list argc, int *size)
 {
 	uintmax_t	mem;
-	char		*tmp;
 
-	tmp = *str;
 	mem = va_arg(argc, unsigned long long);
 	form->out = ft_llitoa_base(mem, 16);
 	if (!form->press && !mem)
@@ -74,12 +69,11 @@ void			print_memory(t_form *form, va_list argc, char **str)
 	form->hash = 1;
 	fill_hash_u(form, 1);
 	fill_width(form);
-	*str = ft_strjoin(tmp, form->out);
-	free(tmp);
+	*size += write(1, form->out, ft_strlen(form->out));
 	free(form->out);
 }
 
-void			parse_int(t_form *form, va_list argc, char **str, int type)
+void			parse_int(t_form *form, va_list argc, int *size, int type)
 {
 	intmax_t	buff;
 	uintmax_t	ubuff;
@@ -105,5 +99,5 @@ void			parse_int(t_form *form, va_list argc, char **str, int type)
 	}
 	if (!form->press && (type == 1 ? !buff : !ubuff))
 		ft_bzero(form->out, ft_strlen(form->out));
-	apply_flags(form, str, type);
+	apply_flags(form, size, type);
 }

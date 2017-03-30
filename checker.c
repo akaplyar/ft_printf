@@ -31,7 +31,7 @@ int			check_flags(char c)
 	return (a);
 }
 
-void		parse_pointer(t_form *form, va_list argc, char **str)
+void		parse_pointer(t_form *form, va_list argc, int *size)
 {
 	int		*ptr;
 
@@ -39,5 +39,5 @@ void		parse_pointer(t_form *form, va_list argc, char **str)
 	ptr = va_arg(argc, int*);
 	if (!ptr)
 		return ;
-	*ptr = (int)(ft_strlen(*str) + g_kostyl);
+	*ptr = *size;
 }

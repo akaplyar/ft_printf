@@ -11,9 +11,12 @@ void		fill_hash_u(t_form *form, int mode)
 		form->width -= mode ? 2 : 1;
 		fill_width(form);
 	}
-	tmp = form->out;
-	form->out = ft_strjoin(hash, tmp);
-	free(tmp);
+	if (ft_strncmp(form->out, "0", 1) || (form->type != o && form->type != O))
+	{
+		tmp = form->out;
+		form->out = ft_strjoin(hash, tmp);
+		free(tmp);
+	}
 	free(hash);
 }
 
@@ -26,7 +29,7 @@ void		fill_width(t_form *form)
 	char	*filler;
 
 	width = (size_t)form->width;
-	len = ft_strlen(form->out) + form->kostyl;
+	len = ft_strlen(form->out) + form->nul;
 	if (len >= width)
 		return ;
 	i = 0;
@@ -70,8 +73,6 @@ void		fill_zero(t_form *form)
 	char	*tmp;
 	char	*zero_str;
 
-	if ((form->type == o || form->type == O) && form->hash && *form->out)
-		form->press++;
 	press = (size_t)form->press;
 	len = ft_strlen(form->out);
 	if (press <= len)
