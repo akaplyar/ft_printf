@@ -50,7 +50,6 @@ typedef struct	s_form
 	int			len;
 	int 		type;
 	int			sign;
-	int			dl;
 	int			cl;
 	int			nul;
 	char 		*out;
