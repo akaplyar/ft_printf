@@ -27,7 +27,7 @@ static void		get_char(t_form *form, va_list argc, int *size)
 	{
 		ctmp = (form->type == c ? va_arg(argc,  int)
 									  : (char)va_arg(argc, wchar_t));
-		form->out = ft_strsub(&ctmp, 0, 1);
+		form->out = ft_strdup(&ctmp);
 	}
 	else
 		form->out = ft_strsub(form->out, 0, 1);
