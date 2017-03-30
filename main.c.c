@@ -4,9 +4,9 @@ int 	main()
 {
 	int a;
 
-	a = ft_printf("%#o\n", 0);
+	a = ft_printf("{%c}\n", 0);
 	ft_printf("%d\n", a);
-	a = printf("%#o\n", 0);
+	a = printf("{%c}\n", 0);
 	printf("%d\n", a);
 	return (0);
 }

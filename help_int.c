@@ -70,7 +70,7 @@ void		fill_zero(t_form *form)
 	char	*tmp;
 	char	*zero_str;
 
-	if ((form->type == o || form->type == O) && form->hash)
+	if ((form->type == o || form->type == O) && form->hash && *form->out)
 		form->press++;
 	press = (size_t)form->press;
 	len = ft_strlen(form->out);

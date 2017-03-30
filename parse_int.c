@@ -16,7 +16,7 @@ static void		len_cast_u(t_form *form, va_list argc, uintmax_t *ubuff)
 		*ubuff = va_arg(argc, size_t);
 	else
 		*ubuff = va_arg(argc, unsigned int);
-	if (!*ubuff)
+	if (!*ubuff && form->press < 0)
 		form->hash = 0;
 }
 
