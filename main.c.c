@@ -2,6 +2,6 @@
 
 int 	main()
 {
-	ft_printf("%hd", 32767);
+	ft_printf("@moulitest: %s", NULL);
 	return (0);
 }

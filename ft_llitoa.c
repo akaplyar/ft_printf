@@ -12,9 +12,9 @@
 
 #include "ft_printf.h"
 
-static void	make_str_base(uintmax_t value, char *str, int base, int *i)
+static void		make_str_base(uintmax_t value, char *str, int base, int *i)
 {
-	char tmp[] = "0123456789abcdef";
+	static char	tmp[] = "0123456789abcdef";
 
 	if (value >= (uintmax_t)base)
 		make_str_base(value / base, str, base, i);

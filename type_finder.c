@@ -30,7 +30,7 @@ char		*find_dolla(char *format, t_form *form)
 	return (format);
 }
 
-char		*find_type(char *format, va_list argc, t_form *form)
+char		*find_type(char *format, t_form *form)
 {
 	if (*format == 'd' || *format == 'D' || *format == 'i')
 		form->type = d;
@@ -54,6 +54,5 @@ char		*find_type(char *format, va_list argc, t_form *form)
 		form->len = (form->len < l ? l : form->len);
 	else if ((form->type == c || form->type == s) && form->cl)
 		form->type = (form->type == c ? C : S);
-	form->arg = va_arg(argc, void *);
 	return (format + 1);
 }

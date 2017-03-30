@@ -28,11 +28,11 @@ static void			form_init(t_form *form)
 	form->quote = 0;
 	form->dolla = 0;
 	form->width = 0;
+	form->kostyl = 0;
 	form->press = -1;
 	form->len = -1;
 	form->type = -1;
 	form->sign = 0;
-	form->arg = NULL;
 	form->out = NULL;
 }
 
@@ -47,9 +47,9 @@ static const char	*parse_format(const char *format, va_list argc, va_list tmp, c
 		format = parse_percent((char*)format, argc, tmp, &form);
 		type = check_type(form.type);
 		if (type == 1 || type == 2)
-			parse_int(&form, str, type);
+			parse_int(&form, tmp, str, type);
 		else if (type == 3)
-			parse_str(&form, str);
+			parse_str(&form, tmp, str);
 //		else if (type == 4)
 //			parse_pointer(&form , str, type);
 	}
@@ -65,6 +65,7 @@ int					ft_printf(const char *format, ...)
 	size_t			help;
 	char			*str;
 
+	g_kostyl = 0;
 	str = (char*)ft_memalloc(1);
 	va_start(argc, format);
 	va_copy(tmp ,argc);
@@ -75,5 +76,5 @@ int					ft_printf(const char *format, ...)
 	va_end(argc);
 	help = ft_strlen(str);
 	write(1, str, help);
-	return ((int)help);
+	return ((int)(help + g_kostyl));
 }

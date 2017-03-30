@@ -26,7 +26,7 @@ void		fill_width(t_form *form)
 	char	*filler;
 
 	width = (size_t)form->width;
-	len = ft_strlen(form->out);
+	len = ft_strlen(form->out) + form->kostyl;
 	if (len >= width)
 		return ;
 	i = 0;

@@ -109,6 +109,6 @@ char		*parse_percent(char *format, va_list argc, va_list tmp, t_form *form)
 	}
 	if (form->dolla)
 		skip_va_list(argc, tmp, form);
-	format = find_type(format, tmp, form);
+	format = find_type(format, form);
 	return (format);
 }

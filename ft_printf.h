@@ -51,15 +51,17 @@ typedef struct	s_form
 	int			sign;
 	int			dl;
 	int			cl;
-	void 		*arg;
+	size_t		kostyl;
 	char 		*out;
 }				t_form;
+
+size_t			g_kostyl;
 
 int				ft_printf(const char *format, ...);
 int 			check_flags(char c);
 int				check_type(int i);
 char			*parse_percent(char *format, va_list argc, va_list tmp, t_form *form);
-char			*find_type(char *format, va_list argc, t_form *form);
+char			*find_type(char *format, t_form *form);
 char			*find_dolla(char *format, t_form *form);
 char			*ft_llitoa(intmax_t value);
 char			*ft_ullitoa(uintmax_t value);
@@ -69,8 +71,8 @@ void			fill_zero(t_form *form);
 void			fill_sign(t_form *form);
 void			fill_width(t_form *form);
 void			fill_hash_u(t_form *form, int mode);
-void			parse_int(t_form *form, char **str, int type);
-void			parse_str(t_form *form, char **str);
+void			parse_int(t_form *form, va_list argc, char **str, int type);
+void			parse_str(t_form *form, va_list argc, char **str);
 void			parse_pointer(t_form *form, char **str, int type);
 
 #endif

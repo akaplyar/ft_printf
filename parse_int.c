@@ -1,50 +1,45 @@
 #include "ft_printf.h"
 
-static void		len_cast2(t_form *form, intmax_t *buff, uintmax_t *ubuff)
+static void		len_cast_u(t_form *form, va_list argc, uintmax_t *ubuff)
 {
-	if (form->len == j)
-	{
-		*buff = (intmax_t)form->arg;
-		*ubuff = (uintmax_t)form->arg;
-	}
+	if (form->len == hh)
+		*ubuff = (unsigned char)va_arg(argc, unsigned int);
+	else if (form->len == h)
+		*ubuff = (unsigned short)va_arg(argc, unsigned int);
+	else if (form->len == l)
+		*ubuff = va_arg(argc, unsigned long);
+	else if (form->len == ll)
+		*ubuff = va_arg(argc, unsigned long long);
+	else if (form->len == j)
+		*ubuff = va_arg(argc, uintmax_t);
 	else if (form->len == z)
-	{
-		*buff = (size_t)form->arg;
-		*ubuff = (size_t)form->arg;
-	}
+		*ubuff = va_arg(argc, size_t);
 	else
-	{
-		*buff = (int)form->arg;
-		*ubuff = (unsigned int)form->arg;
-	}
-	if (!*ubuff || !*buff)
+		*ubuff = va_arg(argc, unsigned int);
+	if ((form->type == o || form->type == O) && form->hash)
+		form->press++;
+	if (!*ubuff)
 		form->hash = 0;
 }
 
-static void		len_cast(t_form *form, intmax_t *buff, uintmax_t *ubuff)
+static void		len_cast(t_form *form, va_list argc, intmax_t *buff)
 {
 	if (form->len == hh)
-	{
-		*buff = (short)(int)form->arg;
-		*ubuff = (unsigned short)form->arg;
-	}
+		*buff = (char)va_arg(argc, int);
 	else if (form->len == h)
-	{
-		*buff = (char)form->arg;
-		*ubuff = (unsigned char)form->arg;
-	}
+		*buff = (short)va_arg(argc, int);
 	else if (form->len == l)
-	{
-		*buff = (long)form->arg;
-		*ubuff = (unsigned long)form->arg;
-	}
+		*buff = va_arg(argc, long);
 	else if (form->len == ll)
-	{
-		*buff = (long long)form->arg;
-		*ubuff = (unsigned long long)form->arg;
-	}
+		*buff = va_arg(argc, long long);
+	else if (form->len == j)
+		*buff = va_arg(argc, intmax_t);
+	else if (form->len == z)
+		*buff = va_arg(argc, size_t);
 	else
-		len_cast2(form, buff, ubuff);
+		*buff = va_arg(argc, int);
+	if (!*buff)
+		form->hash = 0;
 }
 
 static void		apply_flags(t_form *form, char **str, int type)
@@ -66,20 +61,21 @@ static void		apply_flags(t_form *form, char **str, int type)
 	free(form->out);
 }
 
-void			parse_int(t_form *form, char **str, int type)
+void			parse_int(t_form *form, va_list argc, char **str, int type)
 {
 	intmax_t	buff;
 	uintmax_t	ubuff;
 
-	len_cast(form, &buff, &ubuff);
 	if (type == 1)
 	{
+		len_cast(form, argc, &buff);
 		form->out = ft_llitoa(buff);
 		if (buff < 0)
 			form->sign = 1;
 	}
 	else
 	{
+		len_cast_u(form, argc, &ubuff);
 		if (form->type == u || form->type == U)
 			form->out = ft_ullitoa(ubuff);
 		else if (form->type == b)
@@ -89,7 +85,7 @@ void			parse_int(t_form *form, char **str, int type)
 		else if (form->type == x || form->type == X)
 			form->out = ft_llitoa_base(ubuff, 16);
 	}
-	if (!form->press && (!buff || !ubuff))
+	if (!form->press && (type == 1 ? !buff : !ubuff))
 		ft_bzero(form->out, ft_strlen(form->out));
 	apply_flags(form, str, type);
 }

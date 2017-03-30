@@ -39,7 +39,7 @@ static void		wchar_parse(wchar_t w, char *str)
 	}
 }
 
-static void		get_char(t_form *form, char **str)
+static void		get_char(t_form *form, va_list argc, char **str)
 {
 	wchar_t			w;
 	char			*tmp;
@@ -48,30 +48,33 @@ static void		get_char(t_form *form, char **str)
 	if (form->type != c)
 	{
 		if (form->type == c)
-			form->out = ft_strsub((const char*)form->arg, 0, 1);
+			form->out = ft_strsub(va_arg(argc, const char*), 0, 1);
 		else
 			form->out = ft_strsub(form->out, 0, 1);
 	}
 	else
 	{
-		w = (wchar_t)form->arg;
+		w = va_arg(argc, wchar_t);
 		form->out = ft_strnew(4);
 		wchar_parse(w, form->out);
 	}
+	if (form->type == c && (*form->out < 32))
+		form->kostyl += write(1, form->out, 1);
+	g_kostyl += form->kostyl;
 	fill_width(form);
 	*str = ft_strjoin(tmp, form->out);
 	free(tmp);
 	free(form->out);
 }
 
-static void		parse_wstr(t_form *form, char **str)
+static void		parse_wstr(t_form *form, va_list argc, char **str)
 {
 	wchar_t		*wstr;
 	char		*cstr;
 	char		*tmp;
 
 	form->out = ft_strnew(1);
-	wstr = (wchar_t*)form->arg;
+	wstr = va_arg(argc, wchar_t*);
 	cstr = ft_strnew(4);
 	while (*wstr)
 	{
@@ -92,21 +95,24 @@ static void		parse_wstr(t_form *form, char **str)
 	free(form->out);
 }
 
-void			parse_str(t_form *form, char **str)
+void			parse_str(t_form *form, va_list argc, char **str)
 {
 	char		*ptr;
 
 	if (form->type == S)
-		parse_wstr(form, str);
+		parse_wstr(form, argc, str);
 	else if (form->type == c || form->type == C || form->type < 0)
-		get_char(form, str);
+		get_char(form, argc, str);
 	else
 	{
-		ptr = *str;
-		if (!(form->out = ft_strdup((char*)form->arg)))
+		ptr = va_arg(argc, char*);
+		if (!ptr)
 			form->out = ft_strdup("(null)");
+		else
+			form->out = ft_strdup(ptr);
 		cut_press(form);
 		fill_width(form);
+		ptr = *str;
 		*str = ft_strjoin(ptr, form->out);
 		free(ptr);
 	}
