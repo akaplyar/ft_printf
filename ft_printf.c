@@ -29,7 +29,6 @@ char	*make_line(char *format, int *size)
 static void	form_init(t_form *form, int fd)
 {
 	form->cl = 0;
-	form->nul = 0;
 	form->fd = fd;
 	form->hash = 0;
 	form->zero = 0;

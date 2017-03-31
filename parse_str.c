@@ -102,9 +102,12 @@ static void		get_char(t_form *form, va_list argc, int *size)
 {
 	char		ctmp;
 
-	if (form->type == c)
+	if (form->type == c || form->type == C)
 	{
-		ctmp = va_arg(argc, int);
+		if (form->type == C)
+			ctmp = (char)va_arg(argc, wchar_t);
+		else
+			ctmp = va_arg(argc, int);
 		form->out = ft_strsub(&ctmp, 0, 1);
 	}
 	else
@@ -122,9 +125,7 @@ void			parse_str(t_form *form, va_list argc, int *size)
 
 	if (form->type == S)
 		parse_wstr(form, argc, size);
-	else if (form->type == C)
-		get_wchar(form, argc, size);
-	else if (form->type == c || form->type < 0)
+	else if (form->type == c || form->type == C || form->type < 0)
 		get_char(form, argc, size);
 	else
 	{

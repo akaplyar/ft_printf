@@ -36,26 +36,6 @@ static void		wchar_parse(wint_t w, char *str)
 	}
 }
 
-void			get_wchar(t_form *form, va_list argc, int *size)
-{
-	char		ctmp;
-	char		zero;
-
-	zero = '\0';
-		ctmp = 	(char)va_arg(argc, wchar_t);
-		form->out = ft_strsub(&ctmp, 0, 1);
-	if (*form->out < 32 && *form->out > -1)
-		form->nul = 1;
-	fill_width(form);
-	if (!form->minus)
-		*size += write(form->fd, form->out, ft_strlen(form->out));
-	if (form->nul)
-		*size += write(form->fd, &zero, 1);
-	if (form->minus)
-		*size += write(form->fd, form->out, ft_strlen(form->out));
-	free(form->out);
-}
-
 void			parse_wstr(t_form *form, va_list argc, int *size)
 {
 	wchar_t		*wstr;

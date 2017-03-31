@@ -65,7 +65,6 @@ typedef struct	s_form
 	int			sign;
 	int			cl;
 	int			fd;
-	int			nul;
 	char		*out;
 }				t_form;
 
@@ -87,7 +86,6 @@ void			skip_va_list(va_list argc, va_list tmp, t_form *form);
 void			parse_pointer(t_form *form, va_list argc, int *size);
 void			print_memory(t_form *form, va_list argc, int *size);
 void			parse_wstr(t_form *form, va_list argc, int *size);
-void			get_wchar(t_form *form, va_list argc, int *size);
 void			parse_str(t_form *form, va_list argc, int *size);
 void			fill_hash_u(t_form *form, int mode);
 void			fill_quote(t_form *form);

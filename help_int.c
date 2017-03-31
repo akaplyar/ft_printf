@@ -70,7 +70,7 @@ void		fill_width(t_form *form)
 	char	*filler;
 
 	width = (size_t)form->width;
-	len = ft_strlen(form->out) + form->nul;
+	len = ft_strlen(form->out);
 	if (len >= width)
 		return ;
 	i = 0;
