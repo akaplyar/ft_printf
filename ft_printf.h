@@ -76,8 +76,10 @@ char			*parse_percent(char *format, va_list argc, va_list tmp,
 								t_form *form);
 char			*parse_brackets(char *format, t_form *form, va_list argc,
 								int *fd);
+char			*ft_llitoa_base(uintmax_t value, int base);
 char			*find_dolla(char *format, t_form *form);
 char			*find_type(char *format, t_form *form);
+char			*make_line(char *format, int *size);
 char			*ft_llitoa(intmax_t value);
 void			parse_int(t_form *form, va_list argc, int *size, int type);
 void			print_non_printable(t_form *form, va_list argc, int *size);
@@ -85,8 +87,8 @@ void			skip_va_list(va_list argc, va_list tmp, t_form *form);
 void			parse_pointer(t_form *form, va_list argc, int *size);
 void			print_memory(t_form *form, va_list argc, int *size);
 void			parse_wstr(t_form *form, va_list argc, int *size);
+void			get_wchar(t_form *form, va_list argc, int *size);
 void			parse_str(t_form *form, va_list argc, int *size);
-char			*ft_llitoa_base(uintmax_t value, int base);
 void			fill_hash_u(t_form *form, int mode);
 void			fill_quote(t_form *form);
 void			fill_width(t_form *form);

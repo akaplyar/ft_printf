@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-static char	*parse_color2(char *format)
+static char	*parse_color2(char *format, int *size)
 {
 	if (!ft_strncmp(format, "{blue}", 6))
 	{
@@ -35,17 +35,17 @@ static char	*parse_color2(char *format)
 		return (format + 7);
 	}
 	else
-		return (format);
+		return (make_line(format, size));
 }
 
-static char	*parse_color(char *format)
+static char	*parse_color(char *format, int *size)
 {
 	if (!ft_strncmp(format, "{black}", 7))
 	{
 		ft_putstr("\x1B[30m\0");
 		return (format + 7);
 	}
-	if (!ft_strncmp(format, "{red}", 5))
+	else if (!ft_strncmp(format, "{red}", 5))
 	{
 		ft_putstr("\x1B[31m\0");
 		return (format + 5);
@@ -61,23 +61,23 @@ static char	*parse_color(char *format)
 		return (format + 9);
 	}
 	else
-		return (parse_color2(format));
+		return (parse_color2(format, size));
 }
 
-char		*parse_brackets(char *format, t_form *form, va_list argc, int *fd)
+char		*parse_brackets(char *format, t_form *form, va_list argc, int *size)
 {
 	if (!ft_strncmp(format, "{fd}", 4))
 	{
 		form->fd = va_arg(argc, int);
 		if (form->fd < 2 || (write(form->fd, 0, 0) < 0))
 			form->fd = 1;
-		*fd = form->fd;
+		size[1] = form->fd;
 		return (format + 4);
 	}
 	else if (!ft_strncmp(format, "{eofd}", 6))
 	{
 		form->fd = 1;
-		*fd = 1;
+		size[1] = 1;
 		return (format + 6);
 	}
 	else if (!ft_strncmp(format, "{eoc}", 5))
@@ -86,6 +86,8 @@ char		*parse_brackets(char *format, t_form *form, va_list argc, int *fd)
 		return (format + 5);
 	}
 	else
-		format = parse_color(format);
+		format = parse_color(format, size);
 	return (format);
 }
+//if (!(ft_strchr("bygcwrm", *(format + 1))))
+//return (format);

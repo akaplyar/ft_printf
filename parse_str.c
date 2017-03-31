@@ -79,16 +79,14 @@ static void		get_char(t_form *form, va_list argc, int *size)
 	char		zero;
 
 	zero = '\0';
-	if (form->type == c || form->type == C)
+	if (form->type == c)
 	{
-		ctmp = (form->type == c ? va_arg(argc, int) :
-				(char)va_arg(argc, wchar_t));
+		ctmp = (unsigned char)va_arg(argc, int);
 		form->out = ft_strsub(&ctmp, 0, 1);
 	}
 	else
 		form->out = ft_strsub(form->out, 0, 1);
-	if ((form->type == c || form->type == C)
-		&& *form->out < 32 && *form->out > -1)
+	if (form->type == c	&& *form->out < 32 && *form->out > -1)
 		form->nul = 1;
 	fill_width(form);
 	if (!form->minus)
@@ -106,7 +104,9 @@ void			parse_str(t_form *form, va_list argc, int *size)
 
 	if (form->type == S)
 		parse_wstr(form, argc, size);
-	else if (form->type == c || form->type == C || form->type < 0)
+	else if (form->type == C)
+		get_wchar(form, argc, size);
+	else if (form->type == c || form->type < 0)
 		get_char(form, argc, size);
 	else
 	{
@@ -118,5 +118,6 @@ void			parse_str(t_form *form, va_list argc, int *size)
 		cut_press(form);
 		fill_width(form);
 		*size += write(form->fd, form->out, ft_strlen(form->out));
+		free(form->out);
 	}
 }

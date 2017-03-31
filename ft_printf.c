@@ -12,12 +12,12 @@
 
 #include "ft_printf.h"
 
-static char	*make_line(char *format, int *size)
+char	*make_line(char *format, int *size)
 {
 	size_t		len;
 	char		*line;
 
-	len = 0;
+	len = (*format == '{' ? 1 : 0);
 	while (*(format + len) && *(format + len) != '%' && *(format + len) != '{')
 		len++;
 	line = ft_strsub(format, 0, len);
@@ -26,13 +26,11 @@ static char	*make_line(char *format, int *size)
 	return (format + len);
 }
 
-static void	form_init(t_form *form, int *fd)
+static void	form_init(t_form *form, int fd)
 {
-	if (!*fd)
-		*fd = 1;
 	form->cl = 0;
 	form->nul = 0;
-	form->fd = *fd;
+	form->fd = fd;
 	form->hash = 0;
 	form->zero = 0;
 	form->plus = 0;
@@ -52,12 +50,11 @@ static char	*parse_format(char *format, va_list argc, va_list tmp, int *size)
 {
 	t_form		form;
 	int			type;
-	static int	fd;
 
 	if (*format == '%')
 	{
-		form_init(&form, &fd);
-		format = parse_percent((char*)format, argc, tmp, &form);
+		form_init(&form, size[1]);
+		format = parse_percent(format, argc, tmp, &form);
 		type = check_type(&form);
 		if (type == 1 || type == 2)
 			parse_int(&form, tmp, size, type);
@@ -71,9 +68,9 @@ static char	*parse_format(char *format, va_list argc, va_list tmp, int *size)
 			print_non_printable(&form, tmp, size);
 	}
 	else if (*format == '{')
-		format = parse_brackets((char*)format, &form, tmp, &fd);
+		format = parse_brackets(format, &form, tmp, size);
 	else
-		format = make_line((char *)format, size);
+		format = make_line(format, size);
 	return (format);
 }
 
@@ -81,17 +78,18 @@ int			ft_printf(const char *format, ...)
 {
 	va_list		argc;
 	va_list		tmp;
-	int			size;
+	int			size[2];
 
 	if (!format)
 		return (0);
-	size = 0;
+	size[0] = 0;
+	size[1] = 1;
 	va_start(argc, format);
 	va_copy(tmp, argc);
 	while (*format)
-		if (!(format = parse_format((char *)format, argc, tmp, &size)))
+		if (!(format = parse_format((char *)format, argc, tmp, size)))
 			return (0);
 	va_end(tmp);
 	va_end(argc);
-	return (size);
+	return (size[0]);
 }
