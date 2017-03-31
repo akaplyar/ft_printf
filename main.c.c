@@ -1,10 +1,11 @@
 #include "ft_printf.h"
+#include <fcntl.h>
 
 int 	main()
 {
 	int a;
+	int fd;
 
-	a = ft_printf("% ");
-//	write(1, "|\n", 1);
+	ft_printf("%'d\n", 100000000);
 	return (0);
 }

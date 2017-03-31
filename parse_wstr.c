@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_wstr.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/03/31 03:05:26 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/03/31 03:05:27 by akaplyar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 static void		wchar_parse(wint_t w, char *str)
@@ -24,27 +36,6 @@ static void		wchar_parse(wint_t w, char *str)
 	}
 }
 
-void			get_wchar(t_form *form, va_list argc, int *size)
-{
-	wchar_t			w;
-	char			zero;
-
-	zero = '\0';
-	w = (wchar_t)va_arg(argc, wint_t);
-	form->out = ft_strnew(4);
-	wchar_parse(w, form->out);
-	if (*form->out < 32 && *form->out > -1)
-		form->nul = 1;
-	fill_width(form);
-	if (!form->minus)
-		*size += write(1, form->out, ft_strlen(form->out));
-	if (form->nul)
-		*size += write(1, &zero, 1);
-	if (form->minus)
-		*size += write(1, form->out, ft_strlen(form->out));
-	free(form->out);
-}
-
 void			parse_wstr(t_form *form, va_list argc, int *size)
 {
 	wchar_t		*wstr;
@@ -68,6 +59,6 @@ void			parse_wstr(t_form *form, va_list argc, int *size)
 		wstr++;
 	}
 	fill_width(form);
-	*size += write(1, form->out, ft_strlen(form->out));
+	*size += write(form->fd, form->out, ft_strlen(form->out));
 	free(form->out);
 }

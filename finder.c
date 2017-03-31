@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   finder.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/03/31 02:43:45 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/03/31 02:44:06 by akaplyar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 static char	*find_len(char *format, t_form *form)
@@ -92,7 +104,8 @@ static char	*find_flags(char *format, t_form *form)
 	return (format);
 }
 
-char		*parse_percent(char *format, va_list argc, va_list tmp, t_form *form)
+char		*parse_percent(char *format, va_list argc, va_list tmp,
+							t_form *form)
 {
 	format++;
 	format = find_dolla(format, form);

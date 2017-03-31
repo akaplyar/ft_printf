@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   type_finder.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/03/31 03:05:50 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/03/31 03:05:57 by akaplyar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 void		skip_va_list(va_list argc, va_list tmp, t_form *form)
@@ -46,8 +58,8 @@ char		*find_type(char *format, t_form *form)
 		form->type = (*format == 's' ? s : S);
 	else if (*format == 'b' || *format == 'n')
 		form->type = (*format == 'b' ? b : n);
-	else if (*format == 'p')
-		form->type = p;
+	else if (*format == 'p' || *format == 'r')
+		form->type = (*format == 'p' ? p : r);
 	else
 		form->out = format;
 	if (form->type == O || form->type == U || *format == 'D')

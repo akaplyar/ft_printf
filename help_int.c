@@ -1,4 +1,45 @@
-# include "ft_printf.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   help_int.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/03/31 02:53:43 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/03/31 02:59:17 by akaplyar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "ft_printf.h"
+
+void		fill_quote(t_form *form)
+{
+	int		len[3];
+	char	*tmp;
+	char	*ptr;
+
+	len[0] = (int)ft_strlen(form->out);
+	len[1] = (len[0] - 1) / 3;
+	tmp = ft_strnew((size_t)(len[0] + len[1]));
+	tmp[len[1] + len[0]--] = '\0';
+	len[1] += len[0];
+	len[2] = 0;
+	while (len[0] > 0)
+	{
+		if (!((len[2] + 1) % 3))
+		{
+			tmp[len[1]--] = form->out[len[0]--];
+			tmp[len[1]--] = ',';
+			len[2]++;
+		}
+		tmp[len[1]--] = form->out[len[0]--];
+		len[2]++;
+	}
+	tmp[len[1]] = form->out[len[0]];
+	ptr = form->out;
+	form->out = tmp;
+	free(ptr);
+}
 
 void		fill_hash_u(t_form *form, int mode)
 {

@@ -22,7 +22,7 @@ LIB_NAME = $(LIB_PATH)libft.a
 vpath %.c $(LIB_PATH)
 
 OBJ = ft_printf.o help_int.o parse_int.o parse_str.o finder.o type_finder.o\
-		ft_llitoa.o checker.o parse_wstr.o
+		ft_llitoa.o checker.o parse_wstr.o parse_brackets.o
 
 OBJ2 = ft_bzero.o ft_isalnum.o ft_isalpha.o ft_isascii.o ft_isdigit.o ft_isprint.o\
 		ft_memcpy.o ft_memcmp.o ft_memchr.o ft_memmove.o ft_memset.o ft_memccpy.o\

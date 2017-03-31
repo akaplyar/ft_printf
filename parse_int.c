@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_int.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akaplyar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/03/31 03:02:45 by akaplyar          #+#    #+#             */
+/*   Updated: 2017/03/31 03:02:45 by akaplyar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 static void		len_cast_u(t_form *form, va_list argc, uintmax_t *ubuff)
@@ -40,6 +52,8 @@ static void		len_cast(t_form *form, va_list argc, intmax_t *buff)
 
 static void		apply_flags(t_form *form, int *size, int type)
 {
+	if (form->quote && type == 1)
+		fill_quote(form);
 	if (form->press >= 0)
 	{
 		form->zero = 0;
@@ -52,7 +66,7 @@ static void		apply_flags(t_form *form, int *size, int type)
 	fill_width(form);
 	if (form->type == X)
 		ft_strcapitalizer(form->out);
-	*size += write(1, form->out, ft_strlen(form->out));
+	*size += write(form->fd, form->out, ft_strlen(form->out));
 	free(form->out);
 }
 
@@ -69,7 +83,7 @@ void			print_memory(t_form *form, va_list argc, int *size)
 	form->hash = 1;
 	fill_hash_u(form, 1);
 	fill_width(form);
-	*size += write(1, form->out, ft_strlen(form->out));
+	*size += write(form->fd, form->out, ft_strlen(form->out));
 	free(form->out);
 }
 
