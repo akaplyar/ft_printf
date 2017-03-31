@@ -10,6 +10,7 @@ int 	main()
 	a = ft_printf("%4$s %1$s{fd}%s{eofd}\n", "dolla", fd, "test", "this is");
 	ft_printf("%d\n", a);
 	a = printf("%3$s %1$s %s\n", "dolla", "test", "this is");
+	ft_printf("%r\n", "\t\n\r\v");
 	printf("%d", a);
 	return (0);
 }

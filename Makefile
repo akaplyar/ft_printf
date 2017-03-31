@@ -22,7 +22,7 @@ LIB_NAME = $(LIB_PATH)libft.a
 vpath %.c $(LIB_PATH)
 
 OBJ = ft_printf.o help_int.o parse_int.o parse_str.o finder.o type_finder.o\
-		ft_llitoa.o checker.o parse_wstr.o parse_brackets.o
+		checker.o parse_wstr.o parse_brackets.o
 
 OBJ2 = ft_bzero.o ft_isalnum.o ft_isalpha.o ft_isascii.o ft_isdigit.o ft_isprint.o\
 		ft_memcpy.o ft_memcmp.o ft_memchr.o ft_memmove.o ft_memset.o ft_memccpy.o\
@@ -36,7 +36,7 @@ OBJ2 = ft_bzero.o ft_isalnum.o ft_isalpha.o ft_isascii.o ft_isdigit.o ft_isprint
 		ft_lstnew.o ft_lstadd.o ft_lstmap.o ft_lstiter.o ft_lstdelone.o\
 		ft_lstdel.o ft_isspace.o ft_realloc.o ft_abs.o ft_int_sort.o ft_strrev.o\
 		ft_lst_push_back.o get_next_line.o ft_lstcount.o ft_strcapitalizer.o\
-		ft_atoi_base.o hsv.o hsv_colors.o
+		ft_atoi_base.o hsv.o hsv_colors.o ft_llitoa.o
 
 FT_OBJ = $(addprefix $(LIB_PATH),$(OBJ2))
 

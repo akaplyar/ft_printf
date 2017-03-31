@@ -76,6 +76,8 @@ size_t				ft_lstcount(t_list *begin);
 size_t				ft_strlcat(char *restrict dst, const char *restrict src,
 								size_t size);
 char				*ft_itoa(int n);
+char				*ft_llitoa_base(uintmax_t value, int base);
+char				*ft_llitoa(intmax_t value);
 char				*ft_strdup(const char *s1);
 char				*ft_strnew(size_t size);
 char				*ft_strcpy(char *dst, const char *src);
