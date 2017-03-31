@@ -78,16 +78,18 @@ static void		get_char(t_form *form, va_list argc, int *size)
 	char		ctmp;
 	char		zero;
 
-	zero = '\0';
 	if (form->type == c)
 	{
-		ctmp = (unsigned char)va_arg(argc, int);
+		ctmp = va_arg(argc, int);
 		form->out = ft_strsub(&ctmp, 0, 1);
 	}
 	else
 		form->out = ft_strsub(form->out, 0, 1);
 	if (form->type == c	&& *form->out < 32 && *form->out > -1)
+	{
+		zero = *form->out;
 		form->nul = 1;
+	}
 	fill_width(form);
 	if (!form->minus)
 		*size += write(form->fd, form->out, ft_strlen(form->out));
