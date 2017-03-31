@@ -73,10 +73,34 @@ void			print_non_printable(t_form *form, va_list argc, int *size)
 	free(ptr);
 }
 
+void			fill_char(t_form *form, int *size)
+{
+	size_t	width;
+	size_t	i;
+	char	*filler;
+
+	width = (size_t)form->width - 1;
+	i = 0;
+	filler = (char*)ft_memalloc(width + 1);
+	while (i < width)
+		filler[i++] = (char)(form->zero ? '0' : ' ');
+	filler[i] = '\0';
+	if (form->minus)
+	{
+		*size += write(form->fd, form->out, 1);
+		*size += write(form->fd, filler, ft_strlen(filler));
+	}
+	else
+	{
+		*size += write(form->fd, filler, ft_strlen(filler));
+		*size += write(form->fd, form->out, 1);
+	}
+	free(filler);
+}
+
 static void		get_char(t_form *form, va_list argc, int *size)
 {
 	char		ctmp;
-	char		zero;
 
 	if (form->type == c)
 	{
@@ -85,18 +109,10 @@ static void		get_char(t_form *form, va_list argc, int *size)
 	}
 	else
 		form->out = ft_strsub(form->out, 0, 1);
-	if (form->type == c	&& *form->out < 32 && *form->out > -1)
-	{
-		zero = *form->out;
-		form->nul = 1;
-	}
-	fill_width(form);
-	if (!form->minus)
-		*size += write(form->fd, form->out, ft_strlen(form->out));
-	if (form->nul)
-		*size += write(form->fd, &zero, 1);
-	if (form->minus)
-		*size += write(form->fd, form->out, ft_strlen(form->out));
+	if (form->width > 1)
+		fill_char(form, size);
+	else
+		*size += write(form->fd, form->out, 1);
 	free(form->out);
 }
 
